@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Virex Hub</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --red:#ff2438;
+    --red2:#ff5262;
+    --navy:#07111f;
+    --navy2:#0b1728;
+    --white:#ffffff;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Orbitron",sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 50% 35%,rgba(255,35,56,.16),transparent 28%),
+        radial-gradient(circle at 10% 90%,rgba(255,35,56,.10),transparent 30%),
+        radial-gradient(circle at 90% 10%,rgba(20,60,100,.22),transparent 35%),
+        linear-gradient(135deg,#03070d,#07111f 55%,#040911);
+}
+
+/* =========================
+   MOVING BACKGROUND
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.grid{
+    position:absolute;
+    inset:-100px;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:45px 45px;
+    transform:perspective(500px) rotateX(60deg) scale(1.5);
+    transform-origin:center bottom;
+    animation:gridMove 12s linear infinite;
+}
+
+@keyframes gridMove{
+    from{
+        background-position:0 0;
+    }
+    to{
+        background-position:0 450px;
+    }
+}
+
+.glow{
+    position:absolute;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.2;
+}
+
+.glow.one{
+    background:var(--red);
+    left:-180px;
+    top:-150px;
+    animation:glowOne 7s ease-in-out infinite alternate;
+}
+
+.glow.two{
+    background:#12365b;
+    right:-180px;
+    bottom:-180px;
+    animation:glowTwo 8s ease-in-out infinite alternate;
+}
+
+@keyframes glowOne{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(120px,100px) scale(1.25);}
+}
+
+@keyframes glowTwo{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(-100px,-80px) scale(1.2);}
+}
+
+/* =========================
+   PARTICLES
+========================= */
+
+.particles{
+    position:absolute;
+    inset:0;
+}
+
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:var(--red2);
+    box-shadow:0 0 12px var(--red);
+    animation:particleFloat linear infinite;
+}
+
+.particle:nth-child(1){left:7%;top:85%;animation-duration:8s;}
+.particle:nth-child(2){left:17%;top:65%;animation-duration:11s;}
+.particle:nth-child(3){left:29%;top:90%;animation-duration:7s;}
+.particle:nth-child(4){left:41%;top:72%;animation-duration:10s;}
+.particle:nth-child(5){left:54%;top:88%;animation-duration:9s;}
+.particle:nth-child(6){left:67%;top:70%;animation-duration:12s;}
+.particle:nth-child(7){left:78%;top:82%;animation-duration:8s;}
+.particle:nth-child(8){left:91%;top:60%;animation-duration:10s;}
+.particle:nth-child(9){left:12%;top:35%;animation-duration:13s;}
+.particle:nth-child(10){left:85%;top:30%;animation-duration:9s;}
+
+@keyframes particleFloat{
+    0%{
+        transform:translateY(80px) scale(.4);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    80%{
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-650px) scale(1);
+        opacity:0;
+    }
+}
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.card{
+    position:relative;
+    z-index:5;
+    width:min(92%,530px);
+    padding:42px 30px 32px;
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,27,46,.92),
+            rgba(4,10,18,.94)
+        );
+
+    border:1px solid rgba(255,36,56,.42);
+    border-radius:30px;
+
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.025),
+        0 25px 80px rgba(0,0,0,.55),
+        0 0 50px rgba(255,36,56,.12),
+        inset 0 0 40px rgba(255,36,56,.035);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    animation:
+        cardEnter 1s cubic-bezier(.2,.8,.2,1) forwards,
+        cardFloat 5s ease-in-out infinite 1s;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:30px;
+    padding:1px;
+
+    background:linear-gradient(
+        120deg,
+        transparent 20%,
+        rgba(255,36,56,.8),
+        transparent 45%,
+        transparent 70%,
+        rgba(255,255,255,.12)
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+
+    background-size:250% 100%;
+    animation:borderMove 5s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes borderMove{
+    from{background-position:200% 0;}
+    to{background-position:-200% 0;}
+}
+
+@keyframes cardEnter{
+    from{
+        opacity:0;
+        transform:translateY(40px) scale(.94);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+@keyframes cardFloat{
+    0%,100%{
+        margin-top:0;
+    }
+    50%{
+        margin-top:-7px;
+    }
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+    position:relative;
+    width:115px;
+    height:115px;
+    margin:0 auto 23px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:32px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,36,56,.18),
+            rgba(5,15,28,.95)
+        );
+
+    border:2px solid rgba(255,36,56,.75);
+
+    box-shadow:
+        0 0 18px rgba(255,36,56,.6),
+        0 0 50px rgba(255,36,56,.18),
+        inset 0 0 30px rgba(255,36,56,.1);
+
+    animation:logoPulse 3s ease-in-out infinite;
+}
+
+.logo::before{
+    content:"";
+    position:absolute;
+    inset:-12px;
+    border:1px solid rgba(255,36,56,.22);
+    border-radius:38px;
+    animation:logoRing 4s linear infinite;
+}
+
+.logo::after{
+    content:"";
+    position:absolute;
+    width:145px;
+    height:145px;
+    border:1px dashed rgba(255,255,255,.08);
+    border-radius:50%;
+    animation:logoSpin 12s linear infinite;
+}
+
+.logo span{
+    position:relative;
+    z-index:2;
+
+    font-size:68px;
+    font-weight:900;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 8px var(--red),
+        0 0 20px var(--red),
+        0 0 45px rgba(255,36,56,.8);
+
+    animation:textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes logoPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.045);
+    }
+}
+
+@keyframes logoRing{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes logoSpin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(-360deg);
+    }
+}
+
+@keyframes textGlow{
+    from{
+        text-shadow:
+            0 0 8px var(--red),
+            0 0 20px var(--red);
+    }
+    to{
+        text-shadow:
+            0 0 12px #fff,
+            0 0 30px var(--red),
+            0 0 55px var(--red);
+    }
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.title{
+    font-size:clamp(29px,7vw,43px);
+    font-weight:900;
+    letter-spacing:2px;
+    margin-bottom:9px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #ff5667,
+            #ffffff,
+            #b9c8d9
+        );
+
+    background-size:250% auto;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleShine 4s linear infinite;
+}
+
+@keyframes titleShine{
+    to{
+        background-position:250% center;
+    }
+}
+
+.subtitle{
+    font-size:10px;
+    letter-spacing:4px;
+    color:#728197;
+    margin-bottom:28px;
+}
+
+/* =========================
+   KEY BOX
+========================= */
+
+.key-box{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:6px;
+
+    border-radius:16px;
+
+    background:rgba(0,0,0,.3);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,.35),
+        0 0 20px rgba(255,36,56,.04);
+
+    transition:.3s;
+}
+
+.key-box:focus-within{
+    border-color:rgba(255,36,56,.55);
+
+    box-shadow:
+        0 0 25px rgba(255,36,56,.12),
+        inset 0 0 25px rgba(255,36,56,.04);
+}
+
+.key-input{
+    width:100%;
+    min-width:0;
+    height:52px;
+
+    border:0;
+    outline:0;
+
+    padding:0 13px;
+
+    border-radius:11px;
+
+    background:transparent;
+
+    color:#e8edf4;
+
+    font-family:"Orbitron",sans-serif;
+    font-size:10px;
+    letter-spacing:.3px;
+}
+
+.key-input::selection{
+    background:var(--red);
+    color:white;
+}
+
+.copy-btn{
+    height:52px;
+    flex-shrink:0;
+
+    padding:0 20px;
+
+    border:0;
+    border-radius:11px;
+
+    color:white;
+
+    font-family:"Orbitron",sans-serif;
+    font-size:10px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e51e32,
+            #ff3d50
+        );
+
+    box-shadow:
+        0 0 18px rgba(255,36,56,.35);
+
+    transition:.25s ease;
+}
+
+.copy-btn:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 7px 25px rgba(255,36,56,.32),
+        0 0 35px rgba(255,36,56,.22);
+}
+
+.copy-btn:active{
+    transform:scale(.94);
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+    min-height:20px;
+
+    margin-top:17px;
+
+    font-size:10px;
+    letter-spacing:1px;
+
+    color:#68778b;
+
+    transition:.3s;
+}
+
+.status.success{
+    color:#ff6676;
+
+    text-shadow:
+        0 0 10px rgba(255,36,56,.65);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    margin-top:28px;
+
+    font-size:8px;
+    letter-spacing:3px;
+
+    color:#435164;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+    .card{
+        padding:35px 17px 28px;
+        border-radius:25px;
+    }
+
+    .logo{
+        width:96px;
+        height:96px;
+        border-radius:27px;
+    }
+
+    .logo span{
+        font-size:57px;
+    }
+
+    .logo::after{
+        width:125px;
+        height:125px;
+    }
+
+    .title{
+        font-size:28px;
+    }
+
+    .key-box{
+        gap:5px;
+    }
+
+    .key-input{
+        font-size:8px;
+        padding:0 9px;
+    }
+
+    .copy-btn{
+        padding:0 13px;
+        font-size:9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND -->
+<div class="background">
+
+    <div class="grid"></div>
+
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
+    <div class="particles">
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+<main class="card">
+
+    <div class="logo">
+        <span>V</span>
+    </div>
+
+    <h1 class="title">
+        Virex Hub
+    </h1>
+
+    <div class="subtitle">
+        PREMIUM KEY SYSTEM
+    </div>
+
+    <div class="key-box">
+
+        <input
+            id="keyInput"
+            class="key-input"
+            type="text"
+            value="VirexhubKeyHdowheHsiskkwoNsjsoowjeeiMalwpjejdkd"
+            readonly
+        >
+
+        <button
+            class="copy-btn"
+            id="copyBtn"
+            onclick="copyKey()"
+        >
+            COPY KEY
+        </button>
+
+    </div>
+
+    <div
+        class="status"
+        id="status"
+    >
+        Click COPY KEY to copy your key
+    </div>
+
+    <div class="footer">
+        VIREX HUB • KEY SYSTEM
+    </div>
+
+</main>
+
+
+<script>
+
+function copyKey(){
+
+    const input =
+        document.getElementById("keyInput");
+
+    const button =
+        document.getElementById("copyBtn");
+
+    const status =
+        document.getElementById("status");
+
+    const key =
+        input.value;
+
+    navigator.clipboard.writeText(key)
+    .then(() => {
+
+        button.textContent = "COPIED!";
+
+        status.textContent =
+            "Key copied successfully!";
+
+        status.classList.add("success");
+
+        setTimeout(() => {
+
+            button.textContent =
+                "COPY KEY";
+
+            status.textContent =
+                "Click COPY KEY to copy your key";
+
+            status.classList.remove("success");
+
+        },2200);
+
+    })
+    .catch(() => {
+
+        input.select();
+        document.execCommand("copy");
+
+        button.textContent =
+            "COPIED!";
+
+        status.textContent =
+            "Key copied successfully!";
+
+        status.classList.add("success");
+
+        setTimeout(() => {
+
+            button.textContent =
+                "COPY KEY";
+
+            status.textContent =
+                "Click COPY KEY to copy your key";
+
+            status.classList.remove("success");
+
+        },2200);
+
+    });
+}
+
+</script>
+
+</body>
+</html>
